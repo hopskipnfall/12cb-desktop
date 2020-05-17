@@ -39,57 +39,13 @@ app.on('activate', () => {
   }
 })
 
-// const { fork } = require('child_process')
-// const ps = fork(`${__dirname}/server/app.js`)
+app.on('window-all-closed', () => {
+  app.quit();
+});
 
+// Launch child process to run the local server.
 const { fork } = require('child_process')
-// const ps = fork(`${__dirname}/server.js`)
-const ps = fork(`${__dirname}/server/app.js`)
+const ps = fork(`${__dirname}/server/bin/www`)
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-
-
-
-
-// const electron = require("electron"),
-//   app = electron.app,
-//   BrowserWindow = electron.BrowserWindow;
-
-// let mainWindow;
-
-// function createWindow() {
-//   mainWindow = new BrowserWindow({
-//     autoHideMenuBar: true,
-//     width: 640,
-//     height: 480,
-//     webPreferences: {
-//       nodeIntegration: true
-//     }
-//   });
-//   mainWindow.loadURL(`file://${__dirname}/index.html`);
-//   //mainWindow.webContents.openDevTools();
-//   mainWindow.on("close", () => {
-//     mainWindow.webContents.send("stop-server");
-//   });
-//   mainWindow.on("closed", () => {
-//     mainWindow = null;
-//   });
-// }
-
-// app.on("ready", createWindow);
-// app.on("browser-window-created", function(e, window) {
-//   window.setMenu(null);
-// });
-
-// app.on("window-all-closed", function() {
-//   if (process.platform !== "darwin") {
-//     app.quit();
-//   }
-// });
-
-// app.on("activate", function() {
-//   if (mainWindow === null) {
-//     createWindow();
-//   }
-// });
