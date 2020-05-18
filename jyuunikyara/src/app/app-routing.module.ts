@@ -1,6 +1,7 @@
-import { ArenaComponent } from './arena/arena.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { ArenaComponent } from './arena/arena.component';
+import { StreamViewComponent } from './stream-view/stream-view.component';
 import { WinscreenComponent } from './winscreen/winscreen.component';
 
 const routes: Routes = [
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: 'g/:historyEncoding',
     component: ArenaComponent,
+  },
+  {
+    path: 'stream/v1',
+    component: StreamViewComponent,
   }
   // {
   //   path: '**',

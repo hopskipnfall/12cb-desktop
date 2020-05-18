@@ -26,7 +26,7 @@ router.get('/', function(req, res, next) {
     res.redirect(`/${lang}/${req.baseUrl}`);
     return;
   } else if (req.baseUrl.indexOf('.') == -1) {
-    res.sendFile(path.resolve(`public/${lang}/index.html`));
+    res.sendFile(path.resolve(`${__dirname}/../public/${lang}/index.html`));
     return;
   }
 });
