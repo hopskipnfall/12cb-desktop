@@ -3,6 +3,7 @@ const {
   BrowserWindow
 } = require('electron');
 const path = require('path');
+const url = require('url');
 
 function createWindow() {
   // Create the browser window.
@@ -14,8 +15,11 @@ function createWindow() {
     }
   });
 
-  // and load the index.html of the app.
-  win.loadFile(path.join(__dirname, '/electron-client/dist/electron-client/index.html'));
+  win.loadURL(url.format({
+    pathname: path.join(__dirname, 'electron-client/dist/electron-client/index.html'),
+    protocol: 'file:',
+    slashes: true,
+  }));
 
   // Open the DevTools.
   win.webContents.openDevTools();
