@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'electron-client';
+
+  constructor(private socket: Socket) {
+  }
+
+  sendMessage(m: string) {
+    this.socket.emit('chat message', m);
+  }
 }
