@@ -80,8 +80,6 @@
                   "maximumError": "5mb"
                 }
               ],
-
-
               "aot": true,
               "outputPath": "dist/jyuunikyara/ja/",
               "i18nFile": "src/locale/messages.ja.xlf",

@@ -23,12 +23,23 @@ var server = http.createServer(app);
 
 var io = require('socket.io')(server);
 
+var latestState;
+
 io.on('connection', (socket) => {
   console.warn('CONNECTION HAPPENED OMG');
+
+  // Emit the last known state on a new connection.
+  socket.emit('latestState', latestState);
 
   // Relay message.
   socket.on('chat message', function(msg) {
     io.emit('chat message', msg);
+  });
+
+  socket.on('state', msg => {
+    latestState = msg;
+    console.warn('STATE TRANSMITTED');
+    io.emit('state', msg);
   });
 });
 
