@@ -209,10 +209,13 @@ export class BattleService {
   }
 
   clear() {
-    this.player1Name.next('');
-    this.player2Name.next('');
+    // this.player1Name.next('');
+    // this.player2Name.next('');
     this.initialStockCount = 4;
     this.history = [];
+    this.currentRound.next(new RoundInProgress());
+    const snapshot = this.buildSnapshot();
+    this.snapshot.next(snapshot);
   }
 
   submitRound(remainingStocks: number) {

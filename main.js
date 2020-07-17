@@ -33,18 +33,20 @@ function createWindow() {
 
 app.whenReady().then(() => {
   protocol.interceptFileProtocol('file', (request, callback) => {
-    let url = request.url.substr(7); /* all urls start with 'file://' */
+    let url = request.url.substr('file://'.length); /* all urls start with 'file://' */
     console.error(`request for file=${url}. current path is ${__dirname}`);
 
     if (url.startsWith(__dirname)) {
       url = url.substring(__dirname.length);
     }
 
-    // url = url.replace('index.html/', '');
+    // Kinda works.
+    if (url === '/electron-client/dist/' || url.indexOf('electron-client/g/') != -1) {
+      url = 'electron-client/dist/electron-client/index.html';
+    }
 
-    console.error(`repaired ${path.join(__dirname, url)}`)
+    console.error(`repaired ${path.join(__dirname, url)}`);
     callback({ path: path.join(__dirname, url)});
-    // if (err) console.error('Failed to register protocol')
   });
   createWindow();
 });

@@ -60,8 +60,8 @@ export class AppComponent {
   }
 
   showNewGameButton() {
-    return this.route.snapshot.children.length > 0 && this.route.snapshot.children[0].params.historyEncoding;
-    // return true;
+    // return this.route.snapshot.children.length > 0 && this.route.snapshot.children[0].params.historyEncoding;
+    return true;
   }
 
   showUndoButton() {
@@ -74,7 +74,8 @@ export class AppComponent {
   newBattle() {
     this.battleService.clear();
     // Go up one level and let the server decide where to send you.
-    window.location.href = '../';
+    this.router.navigate(['/']);
+    // window.location.href = '../';
   }
 
   undo() {
