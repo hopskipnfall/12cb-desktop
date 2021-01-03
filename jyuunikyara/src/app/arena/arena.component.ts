@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BattleService, CHARS, GameSnapshot, Character, Round, RoundInProgress } from '../battle.service';
+import { BattleService, CHARS, GameSnapshot, Character, Round, RoundInProgress, StateOverWire } from '../battle.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HistoryEncoderService } from '../history-encoder.service';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { ThemeService, THEMES, Theme } from '../theme.service';
 import { MatSelectChange } from '@angular/material/select';
+import { Socket } from 'ngx-socket-io';
 
 export interface RoundReplay {
   player1: {
@@ -42,7 +43,7 @@ export class ArenaComponent implements OnInit, OnDestroy {
   randomCharacter = CHARS[Math.floor(Math.random() * CHARS.length)];
 
   snapshot: GameSnapshot;
-  
+
   selectedTheme: string;
 
   p1SelectMode = true;
@@ -68,7 +69,8 @@ export class ArenaComponent implements OnInit, OnDestroy {
               private encoder: HistoryEncoderService,
               private route: ActivatedRoute,
               private location: Location,
-              private themeService: ThemeService) { }
+              private themeService: ThemeService,
+              private socket: Socket) { }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -101,7 +103,26 @@ export class ArenaComponent implements OnInit, OnDestroy {
 
       this.route.paramMap.subscribe(map => {
         console.log("It changed!!!!!!!!", map);
-      })
+      }),
+
+      this.socket.fromEvent('latestState')
+        .subscribe(newState => {
+          console.log('RECEIVED INITIAL STATE', newState);
+          if (!newState) {
+            return;
+          }
+          const s = newState as StateOverWire;
+          this.battleService.loadState(s);
+          this.themeService.setTheme(s.theme);
+        }),
+
+      this.socket.fromEvent('state')
+        .subscribe(newState => {
+          console.log('RECEIVED NEW DATA', newState);
+          const s = newState as StateOverWire;
+          this.themeService.setTheme(s.theme);
+          this.battleService.loadState(s);
+        }),
     );
 
     this.initialStockCount = this.battleService.getInitialStockCount();
@@ -167,7 +188,7 @@ export class ArenaComponent implements OnInit, OnDestroy {
     } else {
       // Load state into the URL.
       const encoded = this.encoder.encodeHistory(this.battleService.getHistory());
-      const urlParams: {[key: string]: string} = {};
+      const urlParams: { [key: string]: string } = {};
       if (this.player1Name) {
         urlParams.p1 = this.player1Name;
       }
@@ -218,7 +239,6 @@ export class ArenaComponent implements OnInit, OnDestroy {
   }
 
   showNewGameButton() {
-    console.log(this.route.snapshot);
     return this.route.snapshot.children.length > 0 && this.route.snapshot.children[0].params.historyEncoding;
     // return true;
   }

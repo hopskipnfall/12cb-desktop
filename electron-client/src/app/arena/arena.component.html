@@ -1,0 +1,29 @@
+<div class="wrapper">
+<app-character-grid
+    [playerName]="player1Name"
+    i18n-playerNamePlaceholder
+    playerNamePlaceholder="Player 1"
+    [selectedCharacter]="player1Selected"
+    [playerSnapshot]="snapshot.player1"
+    [selectMode]="p1SelectMode"
+    (clickCharacter)="characterClicked('player1', $event)"
+    (nameUpdated)="updateName('player1', $event)"
+    [readyToFight]="player1Selected && !player2Selected && initialCharSelect"
+    [initialStockCount]="initialStockCount"
+    [showStockSelector]="!gameOver && player1Selected && player2Selected"
+    (selectedRemainingStocks)="p1RemainingStocksSelected($event)"></app-character-grid>
+
+<app-character-grid
+    [playerName]="player2Name"
+    i18n-playerNamePlaceholder
+    playerNamePlaceholder="Player 2"
+    [selectedCharacter]="player2Selected"
+    [playerSnapshot]="snapshot.player2"
+    [selectMode]="p2SelectMode"
+    (clickCharacter)="characterClicked('player2', $event)"
+    (nameUpdated)="updateName('player2', $event)"
+    [readyToFight]="player2Selected && !player1Selected && initialCharSelect"
+    [initialStockCount]="initialStockCount"
+    [showStockSelector]="!gameOver && player1Selected && player2Selected"
+    (selectedRemainingStocks)="p2RemainingStocksSelected($event)"></app-character-grid>
+</div>

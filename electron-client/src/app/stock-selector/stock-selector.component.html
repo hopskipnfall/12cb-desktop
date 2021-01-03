@@ -1,0 +1,15 @@
+<div class="pikapika"
+     [ngClass]="{'pos1': pos == 1, 'pos2': pos == 2, 'pos3': pos == 3, 'pos4': pos == 4, 'pos5': pos == 5, 'pos6': pos == 6}">
+  <span i18n class="stock-label">How many stocks remaining?</span>
+
+  <mat-grid-list cols="2" rowHeight="1:1">
+    <mat-grid-tile class="stock-tile selectable"
+        *ngFor="let r of range(maxStockCount)"
+        [style.background-image]="'url(' + bgImage + ')'"
+        (click)="recordStocks(r + 1)">
+        <div class="stock-count-label-box">
+          <span class="stock-count-label" i18n="Number of stocks">{{r + 1}}</span>
+        </div>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

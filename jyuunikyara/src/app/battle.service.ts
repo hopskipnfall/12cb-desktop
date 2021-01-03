@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, AsyncSubject } from 'rxjs';
+import { Theme } from './theme.service';
 
 export interface Character {
   name: string;
@@ -254,20 +255,37 @@ export class BattleService {
     // }
   }
 
-  loadHistory(history: Round[]) {
+  loadHistory(history: Round[], currentRound?: RoundInProgress) {
     this.history = history;
-    const lastRound = history[history.length - 1];
+    const nextRound = currentRound || new RoundInProgress();
 
-    const nextRound = new RoundInProgress();
-    if (lastRound.winner === 'player1') {
-      nextRound.player1 = {name: lastRound.player1Character, stocks: lastRound.remainingStocks};
-    } else {
-      nextRound.player2 = {name: lastRound.player2Character, stocks: lastRound.remainingStocks};
+    const lastRound = history[history.length - 1];
+    if (lastRound) {
+      if (lastRound.winner === 'player1') {
+        nextRound.player1 = {name: lastRound.player1Character, stocks: lastRound.remainingStocks};
+      } else {
+        nextRound.player2 = {name: lastRound.player2Character, stocks: lastRound.remainingStocks};
+      }
     }
 
     const snapshot = this.buildSnapshot();
-
     this.snapshot.next(snapshot);
     this.currentRound.next(nextRound);
   }
+
+  loadState(state: StateOverWire) {
+    this.setPlayer1Name(state.names.player1);
+    this.setPlayer2Name(state.names.player2);
+    this.loadHistory(state.history, state.roundInProgress);
+  }
+}
+
+export interface StateOverWire {
+  history: Round[];
+  names: {
+    player1?: string,
+    player2?: string,
+  };
+  roundInProgress: RoundInProgress;
+  theme: Theme;
 }

@@ -1,6 +1,7 @@
 const {
   app,
-  BrowserWindow
+  BrowserWindow,
+  protocol,
 } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -8,27 +9,51 @@ const url = require('url');
 function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 690,
+    height: 650,
     webPreferences: {
       nodeIntegration: true,
     }
   });
 
+  win.removeMenu();
+
   win.loadURL(url.format({
-    pathname: path.join(__dirname, 'electron-client/dist/electron-client/index.html'),
+//    pathname: path.join(__dirname, 'electron-client/dist/electron-client/index.html'),
+    pathname: path.normalize('electron-client/dist/electron-client/index.html'),
     protocol: 'file:',
     slashes: true,
   }));
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(createWindow);
+// // This method will be called when Electron has finished
+// // initialization and is ready to create browser windows.
+// // Some APIs can only be used after this event occurs.
+// app.whenReady().then(createWindow);
+
+app.whenReady().then(() => {
+  protocol.interceptFileProtocol('file', (request, callback) => {
+    let url = path.normalize(request.url);
+    console.error(`request for file=${url}.\ncurrent path is ${__dirname}`);
+    url = url.substr(path.normalize('file://').length); /* all urls start with 'file://' */
+
+    if (url.startsWith(__dirname)) {
+      url = url.substring(__dirname.length);
+    }
+
+    //// Kinda works.
+    //if (url === path.normalize('/electron-client/dist/') || url.indexOf(path.normalize('electron-client/g/') != -1)) {
+    //  url = path.normalize('electron-client/dist/electron-client/index.html');
+    //}
+
+    console.error(`repaired ${path.join(__dirname, url)}`);
+    callback({ path: path.join(__dirname, url)});
+  });
+  createWindow();
+});
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the

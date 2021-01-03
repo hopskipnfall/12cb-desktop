@@ -1,0 +1,98 @@
+$tile-bg: #929292;
+  
+.message-box
+  margin-bottom: 10px
+
+.wrapper
+  display: flex
+
+.character-tile
+  background-size: contain
+  background-repeat: no-repeat
+  background-size: 90%
+  background-position: center
+  transform: scale(0.95)
+  border-radius: 12px
+  float: left
+
+.selectable
+  background: #656565
+
+.centered-overlay
+  position: absolute
+  margin-left: auto
+  margin-right: auto
+  left: 0
+  right: 0
+  top: 0
+  bottom: 0
+  align-items: center
+  justify-content: center
+  display: flex
+  z-index: 10
+
+.vs-overlay
+  font-size: 35px
+  pointer-events: none
+
+.round-winner
+  background-color: $tile-bg
+  border-radius: 10px
+
+  animation: 0.5s ease 0s bulge
+  float: left
+  transform: scale(0.95)
+
+.round-loser
+  opacity: 0.25
+  border-radius: 10px
+
+@keyframes bulge 
+
+  0% 
+    background-color: darken($tile-bg, 5%)
+    transform: scale(0.99)
+
+  100% 
+    transform: scale(0.95)
+    background-color: $tile-bg
+
+
+.char-background
+  margin-top: auto
+  display: flex
+  flex-grow: 1
+  background-size: contain
+  background-repeat: no-repeat
+  background-size: 90%
+  background-position: center
+  height: 100%
+
+.char-background-slice
+  margin-top: auto
+  display: flex
+  flex-grow: 1
+  background-size: contain
+  background-repeat: no-repeat
+  background-size: 90%
+  background-position: center
+
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+
+.faded-bg
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  opacity: 0.2
+
+.button-row
+  margin-right: 8px
+  height: 60px
+  font-size: 15pt
+  margin-bottom: 8px

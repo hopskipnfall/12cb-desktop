@@ -1,0 +1,43 @@
+<mat-card class="player-card">
+  <mat-card-header>
+    <mat-card-title>
+      <!-- <mat-form-field *ngIf="!nameStatic" style="width: 87%">
+        <input matInput type="text" name="stockCount"
+            [placeholder]="playerNamePlaceholder"
+            (change)="nameUpdated.emit(playerName)"
+            [(ngModel)]="playerName">
+      </mat-form-field> -->
+      <span class="player-name"
+          (click)="openNameDialog()">
+        {{playerName || playerNamePlaceholder}}<mat-icon class="name-edit-icon" *ngIf="!playerName">edit</mat-icon>
+      </span>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content style="position: relative">
+    <app-stock-selector
+        *ngIf="showStockSelector"
+        [initialStockCount]="initialStockCount"
+        [maxStockCount]="selectedCharacter.stocks"
+        [pos]="getPositionForChar(selectedCharacter)"
+        [bgImage]="selectedCharacter ? themeService.getCharacterImage(selectedCharacter.name) : ''"
+        (selectedRemainingStocks)="selectedRemainingStocks.emit($event)">
+    </app-stock-selector>
+    <div class="button-overlay" *ngIf="readyToFight">
+      <span class="ready-to-fight" i18n="Banner indicating the player is ready to fight">Ready to Fight</span>
+    </div>
+
+    <mat-grid-list cols="2" rowHeight="1:1">
+      <mat-grid-tile class="character-tile" 
+          matRipple
+          [matRippleDisabled]="!(selectMode && character.stocks != 0)"
+          *ngFor="let character of playerSnapshot.characters"
+          [ngClass]="{'dead': character.stocks == 0, 'dying': (character.stocks != 0 && character.stocks != initialStockCount), 'selected-char': (selectedCharacter && (character.name == selectedCharacter.name)), 'selectable': selectMode && character.stocks != 0 && character.name != selectedCharacter}"
+          (click)="clickCharacter.emit(character)">
+          <div class="image-bg"
+              [style.background-image]="'url(' + themeService.getCharacterImage(character.name) + ')'">
+            <app-character character="{{character.name}}" stocks="{{character.stocks}}" [initialStockCount]="initialStockCount"></app-character>
+          </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+</mat-card>
